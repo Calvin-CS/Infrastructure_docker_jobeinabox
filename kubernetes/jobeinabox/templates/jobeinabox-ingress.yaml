@@ -8,10 +8,10 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      if ($apikey_is_ok != 1) {
-      return 401;
-      }
+    # nginx.ingress.kubernetes.io/configuration-snippet: |
+    #   if ($apikey_is_ok != 1) {
+    #   return 401;
+    #   }
 spec:
   tls:
   - hosts:
