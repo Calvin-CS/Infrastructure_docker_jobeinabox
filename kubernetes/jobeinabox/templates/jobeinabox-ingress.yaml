@@ -4,13 +4,14 @@ metadata:
   name: jobe-{{ default "staging" .Release.Namespace }}-ingress
   namespace: {{ default "staging" .Release.Namespace }}
   annotations:
+    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/use-regex: "true"
-    # nginx.ingress.kubernetes.io/configuration-snippet: |
-    #   if ($apikey_is_ok != 1) {
-    #   return 401;
-    #   }
+    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      if ($apikey_is_ok != 1) {
+      return 401;
+      }
 spec:
   tls:
   - hosts:
@@ -20,7 +21,7 @@ spec:
   - host: jobe{{- if ne .Release.Namespace "production" }}-{{ default "staging" .Release.Namespace }}{{- end }}.{{ .Values.dns.name }}
     http:
       paths:
-      - path: /
+      - path: /(.*)
         pathType: Prefix
         backend:
           service:
